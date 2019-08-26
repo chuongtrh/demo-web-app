@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'circleci/node:10.16.0-stretch-browsers' }
+        docker { image 'samtran/node:10.16.0-browsers' }
     }  
     stages {
         stage('Install dependencies') {
