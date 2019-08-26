@@ -32,7 +32,7 @@ module.exports = function (config) {
       },
       fixWebpackSourcePaths: true
     },
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['progress', 'kjhtml', 'junit'],
     junitReporter: {
       outputDir: 'test-results',
       outputFile: 'unit-test-results.xml'
