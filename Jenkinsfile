@@ -19,26 +19,25 @@ pipeline {
             steps {
                 unstash 'node_modules'
                 sh 'npm run test'
-                // junit 'test-results/**/*.xml'
-                // junit 'coverage/**/*.xml'
-                // cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/cobertura.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
-                sh 'ls'
+                junit 'test-results/**/*.xml'
             }
             post {
                 always {
-                    step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/**/*.xml'])
+                    step([$class: 'Test Results', coberturaReportFile: 'test-results/**/*.xml'])
                 }
             }
         }
-        // stage('E2E Test') {
-        //     steps {
-        //         unstash 'node_modules'
-        //         sh 'npm run e2e'
-        //         junit 'coverage/**/*.xml'
-        //         cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/cobertura.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
-        //         sh 'ls'
-        //     }
-        // }
+        stage('E2E Test') {
+            steps {
+                unstash 'node_modules'
+                sh 'npm run e2e'
+            }
+            post {
+                always {
+                    step([$class: 'Coverage Report', coberturaReportFile: 'coverage/**/*.xml'])
+                }
+            }
+        }
         stage('Build') {
             steps {
                 unstash 'node_modules'
