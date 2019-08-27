@@ -26,11 +26,7 @@ pipeline {
             steps {
                 unstash 'node_modules'
                 sh 'npm run e2e'
-            }
-            post {
-                always {
-                    step([$class: 'Coverage Report', coberturaReportFile: 'coverage/**/*.xml'])
-                }
+                cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/cobertura.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
             }
         }
         stage('Build') {
