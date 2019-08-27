@@ -21,11 +21,6 @@ pipeline {
                 sh 'npm run test'
                 junit 'test-results/**/*.xml'
             }
-            post {
-                always {
-                    step([$class: 'Test Results', coberturaReportFile: 'test-results/**/*.xml'])
-                }
-            }
         }
         stage('E2E Test') {
             steps {
