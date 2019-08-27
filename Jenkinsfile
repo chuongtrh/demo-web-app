@@ -19,17 +19,26 @@ pipeline {
             steps {
                 unstash 'node_modules'
                 sh 'npm run test'
-                junit 'test-results/**/*.xml'
+                // junit 'test-results/**/*.xml'
+                // junit 'coverage/**/*.xml'
+                // cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/cobertura.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
+                sh 'ls'
+            }
+            post {
+                always {
+                    step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/**/*.xml'])
+                }
             }
         }
-        stage('E2E Test') {
-            steps {
-                unstash 'node_modules'
-                sh 'npm run e2e'
-                junit 'coverage/**/*.xml'
-                cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/cobertura.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
-            }
-        }
+        // stage('E2E Test') {
+        //     steps {
+        //         unstash 'node_modules'
+        //         sh 'npm run e2e'
+        //         junit 'coverage/**/*.xml'
+        //         cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/cobertura.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
+        //         sh 'ls'
+        //     }
+        // }
         stage('Build') {
             steps {
                 unstash 'node_modules'
