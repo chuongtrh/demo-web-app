@@ -41,7 +41,6 @@ pipeline {
                 unstash 'dist'
                 pwd(); //Log current directory
                 withAWS(region:'ap-southeast-1',credentials:'aws-dev-ops') {
-                    def identity=awsIdentity();//Log AWS credentials
                     // Upload files from working directory 'dist' in your project workspace
                     s3Upload(bucket:"demo-web-app-dev", workingDir:'dist', includePathPattern:'**/*');
                 }
