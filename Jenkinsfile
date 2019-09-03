@@ -36,13 +36,24 @@ pipeline {
                 stash includes: 'dist/', name: 'dist'
             }
         }
-        stage('Upload') {
+        stage('Upload S3 DEV') {
             steps {
                 unstash 'dist'
-                pwd(); //Log current directory
                 withAWS(region:'ap-southeast-1',credentials:'aws-dev-ops') {
-                    // Upload files from working directory 'dist' in your project workspace
                     s3Upload(bucket:"demo-web-app-dev", workingDir:'dist', includePathPattern:'**/*');
+                }
+            }
+        }
+        stage('Sanity check') {
+            steps {
+                input "Do you want to deploy on STAGING?"
+            }
+        }
+        stage('Upload S3 STAGING') {
+            steps {
+                unstash 'dist'
+                withAWS(region:'ap-southeast-1',credentials:'aws-dev-ops') {
+                    s3Upload(bucket:"demo-web-app-staging", workingDir:'dist', includePathPattern:'**/*');
                 }
             }
         }
